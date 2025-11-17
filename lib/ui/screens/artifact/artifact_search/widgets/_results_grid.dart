@@ -2,7 +2,7 @@ part of '../artifact_search_screen.dart';
 
 /// Staggered Masonry styled grid for displaying two columns of different aspect-ratio images.
 class _ResultsGrid extends StatefulWidget {
-  const _ResultsGrid({super.key, required this.searchResults, required this.onPressed});
+  const _ResultsGrid({required this.searchResults, required this.onPressed});
   final void Function(SearchData) onPressed;
   final List<SearchData> searchResults;
 
@@ -63,7 +63,7 @@ class _ResultsGridState extends State<_ResultsGrid> {
           onPressed: () => settingsLogic.hasDismissedSearchMessage.value = true,
           semanticLabel: $strings.resultsSemanticDismiss,
           child: Container(
-            color: $styles.colors.offWhite.withOpacity(0.1),
+            color: $styles.colors.offWhite.withValues(alpha: 0.1),
             padding: EdgeInsets.all($styles.insets.sm),
             child: Row(
               children: [

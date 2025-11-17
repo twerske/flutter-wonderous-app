@@ -2,7 +2,6 @@ part of '../collection_screen.dart';
 
 class _CollectibleImage extends StatelessWidget {
   const _CollectibleImage({
-    super.key,
     required this.collectible,
     required this.state,
     required this.onPressed,
@@ -50,7 +49,7 @@ class _CollectibleImage extends StatelessWidget {
         color: $styles.colors.black,
         border: isNew ? Border.all(color: $styles.colors.accent1, width: 3) : null,
         boxShadow:
-            !isNew ? null : [BoxShadow(color: $styles.colors.accent1.withOpacity(0.6), blurRadius: $styles.insets.sm)],
+            !isNew ? null : [BoxShadow(color: $styles.colors.accent1.withValues(alpha: 0.6), blurRadius: $styles.insets.sm)],
       ),
       child: AppImage(
         image: NetworkImage(collectible.imageUrlSmall),

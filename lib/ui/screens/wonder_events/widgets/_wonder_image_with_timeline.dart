@@ -1,15 +1,17 @@
 part of '../wonder_events.dart';
 
 class _WonderImageWithTimeline extends StatelessWidget {
-  const _WonderImageWithTimeline({super.key, required this.data, required this.height});
+  const _WonderImageWithTimeline({required this.data, required this.height});
   final WonderData data;
   final double height;
 
   Color _fixLuminance(Color color, [double luminance = 0.2]) {
     double d = luminance - color.computeLuminance();
     if (d <= 0) return color;
-    int r = color.red, g = color.green, b = color.blue;
-    return Color.fromARGB(255, (r + (255 - r) * d).toInt(), (g + (255 - g) * d).toInt(), (b + (255 - b) * d).toInt());
+    final r = color.r + (1.0 - color.r) * d;
+    final g = color.g + (1.0 - color.g) * d;
+    final b = color.b + (1.0 - color.b) * d;
+    return Color.fromARGB(255, (r * 255).round(), (g * 255).round(), (b * 255).round());
   }
 
   @override
@@ -24,17 +26,15 @@ class _WonderImageWithTimeline extends StatelessWidget {
             children: [
               /// Text and image in a stack
               Expanded(
-                child: Stack(children: [
-                  /// Image with fade on btm
-                  Center(
-                    child: _buildImageWithFade(context),
-                  ),
+                child: Stack(
+                  children: [
+                    /// Image with fade on btm
+                    Center(child: _buildImageWithFade(context)),
 
-                  /// Title text
-                  BottomCenter(
-                    child: WonderTitleText(data, enableHero: false),
-                  )
-                ]),
+                    /// Title text
+                    BottomCenter(child: WonderTitleText(data, enableHero: false)),
+                  ],
+                ),
               ),
 
               /// Bottom timeline
@@ -42,21 +42,22 @@ class _WonderImageWithTimeline extends StatelessWidget {
                 child: SizedBox(
                   height: 50,
                   child: WondersTimelineBuilder(
-                      selectedWonders: [data.type],
-                      timelineBuilder: (_, data, isSelected) {
-                        return Container(
-                          decoration: BoxDecoration(
-                            color: isSelected ? _fixLuminance(data.type.fgColor) : Colors.transparent,
-                            border: isSelected
-                                ? Border.all(color: Colors.transparent)
-                                : Border.all(color: $styles.colors.greyMedium),
-                            borderRadius: BorderRadius.circular($styles.corners.md),
-                          ),
-                        );
-                      }),
+                    selectedWonders: [data.type],
+                    timelineBuilder: (_, data, isSelected) {
+                      return Container(
+                        decoration: BoxDecoration(
+                          color: isSelected ? _fixLuminance(data.type.fgColor) : Colors.transparent,
+                          border: isSelected
+                              ? Border.all(color: Colors.transparent)
+                              : Border.all(color: $styles.colors.greyMedium),
+                          borderRadius: BorderRadius.circular($styles.corners.md),
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ),
-              _buildEraTextRow(context)
+              _buildEraTextRow(context),
             ],
           ),
         ),
@@ -81,11 +82,7 @@ class _WonderImageWithTimeline extends StatelessWidget {
           ),
 
           /// Vertical gradient on btm
-          Positioned.fill(
-            child: BottomCenter(
-              child: ListOverscollGradient(bottomUp: true, size: 200),
-            ),
-          )
+          Positioned.fill(child: BottomCenter(child: ListOverscollGradient(bottomUp: true, size: 200))),
         ],
       ),
     );
@@ -99,10 +96,7 @@ class _WonderImageWithTimeline extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text(
-          $strings.titleLabelDate(
-            StringUtils.formatYr(data.startYr),
-            StringUtils.formatYr(data.endYr),
-          ),
+          $strings.titleLabelDate(StringUtils.formatYr(data.startYr), StringUtils.formatYr(data.endYr)),
           style: textStyle,
         ),
         _buildDot(context),

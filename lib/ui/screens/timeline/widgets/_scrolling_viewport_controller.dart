@@ -13,9 +13,7 @@ class _ScrollingViewportController extends ChangeNotifier {
   _ScrollingViewport get widget => state.widget;
   ScrollController get scroller => widget.scroller;
   late final ValueNotifier<int> _currentYr = ValueNotifier(startYr)
-    ..addListener(
-      () => state.widget.onYearChanged?.call(_currentYr.value),
-    );
+    ..addListener(() => state.widget.onYearChanged?.call(_currentYr.value));
 
   void init() {
     scheduleMicrotask(() {
@@ -92,7 +90,7 @@ class _ScrollingViewportController extends ChangeNotifier {
   }
 
   void _handleScaleUpdateMouse(double scale) {
-    setZoom( Math.max(0, Math.min(1, _zoom + scale)) );
+    setZoom(math.max(0, math.min(1, _zoom + scale)));
   }
 
   /// Maintain current yr when the app changes size

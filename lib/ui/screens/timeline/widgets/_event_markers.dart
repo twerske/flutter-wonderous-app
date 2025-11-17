@@ -3,7 +3,7 @@ part of '../timeline_screen.dart';
 /// A vertically aligned stack of dots that represent global events
 /// The event closest to the [selectedYr] param will be visible selected
 class _EventMarkers extends StatefulWidget {
-  const _EventMarkers(this.selectedYr, {super.key, required this.onEventChanged, required this.onMarkerPressed});
+  const _EventMarkers(this.selectedYr, {required this.onEventChanged, required this.onMarkerPressed});
 
   final void Function(TimelineEvent? event) onEventChanged;
   final void Function(TimelineEvent event) onMarkerPressed;
@@ -92,7 +92,7 @@ class _EventMarkersState extends State<_EventMarkers> {
   }
 
   List<Widget> _buildReferenceMarkers() {
-    final marker = Container(color: Colors.red.withOpacity(.4), width: 10, height: 10);
+    final marker = Container(color: Colors.red.withValues(alpha: .4), width: 10, height: 10);
     return [
       Align(
         alignment: Alignment.topCenter,
@@ -112,7 +112,6 @@ class _EventMarkersState extends State<_EventMarkers> {
 class _EventMarker extends StatelessWidget {
   const _EventMarker(
     this.offset, {
-    super.key,
     required this.isSelected,
     required this.event,
     required this.onPressed,
@@ -148,7 +147,7 @@ class _EventMarker extends StatelessWidget {
                   color: $styles.colors.accent1,
                   boxShadow: [
                     BoxShadow(
-                        color: $styles.colors.accent1.withOpacity(isSelected ? .5 : 0), spreadRadius: 3, blurRadius: 3),
+                        color: $styles.colors.accent1.withValues(alpha: isSelected ? .5 : 0), spreadRadius: 3, blurRadius: 3),
                   ],
                 ),
               ),

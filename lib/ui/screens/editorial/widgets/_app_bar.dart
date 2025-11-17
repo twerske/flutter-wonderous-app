@@ -1,7 +1,7 @@
 part of '../editorial_screen.dart';
 
 class _AppBar extends StatelessWidget {
-  _AppBar(this.wonderType, {super.key, required this.sectionIndex, required this.scrollPos});
+  _AppBar(this.wonderType, {required this.sectionIndex, required this.scrollPos});
   final WonderType wonderType;
   final ValueNotifier<int> sectionIndex;
   final ValueNotifier<double> scrollPos;
@@ -76,7 +76,7 @@ class _AppBar extends StatelessWidget {
                 if (showOverlay) ...[
                   AnimatedContainer(
                     duration: $styles.times.med,
-                    color: wonderType.bgColor.withOpacity(showOverlay ? .8 : 0),
+                    color: wonderType.bgColor.withValues(alpha: showOverlay ? .8 : 0),
                   ),
                 ],
               ],

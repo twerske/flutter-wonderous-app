@@ -13,10 +13,7 @@ class FullscreenVideoViewer extends StatefulWidget {
 }
 
 class _FullscreenVideoViewerState extends State<FullscreenVideoViewer> {
-  late final _controller = YoutubePlayerController.fromVideoId(
-    videoId: widget.id,
-    params: const YoutubePlayerParams(),
-  );
+  late final _controller = YoutubePlayerController.fromVideoId(videoId: widget.id, params: const YoutubePlayerParams());
 
   bool get _enableVideo => PlatformInfo.isMobile;
 
@@ -24,31 +21,36 @@ class _FullscreenVideoViewerState extends State<FullscreenVideoViewer> {
   void initState() {
     super.initState();
     appLogic.supportedOrientationsOverride = [Axis.horizontal, Axis.vertical];
-    RawKeyboard.instance.addListener(_handleKeyDown);
+    HardwareKeyboard.instance.addHandler(_handleKeyDown);
   }
 
   @override
   void dispose() {
     // when view closes, remove the override
     appLogic.supportedOrientationsOverride = null;
-    RawKeyboard.instance.removeListener(_handleKeyDown);
+    HardwareKeyboard.instance.removeHandler(_handleKeyDown);
     super.dispose();
   }
 
-  Future<void> _handleKeyDown(RawKeyEvent value) async {
-    if (value.repeat) return;
-    if (value is RawKeyDownEvent) {
+  bool _handleKeyDown(KeyEvent value) {
+    if (value is KeyDownEvent) {
       final k = value.logicalKey;
       if (k == LogicalKeyboardKey.enter || k == LogicalKeyboardKey.space) {
         if (_enableVideo) {
-          final state = await _controller.playerState;
-          if (state == PlayerState.playing) {
-            _controller.pauseVideo();
-          } else {
-            _controller.playVideo();
-          }
+          _toggleVideo();
         }
+        return true;
       }
+    }
+    return false;
+  }
+
+  void _toggleVideo() async {
+    final state = await _controller.playerState;
+    if (state == PlayerState.playing) {
+      _controller.pauseVideo();
+    } else {
+      _controller.playVideo();
     }
   }
 
@@ -61,19 +63,14 @@ class _FullscreenVideoViewerState extends State<FullscreenVideoViewer> {
         children: [
           Center(
             child: (PlatformInfo.isMobile || kIsWeb)
-                ? YoutubePlayer(
-                    controller: _controller,
-                    aspectRatio: aspect,
-                  )
+                ? YoutubePlayer(controller: _controller, aspectRatio: aspect)
                 : Placeholder(),
           ),
           SafeArea(
             child: Padding(
               padding: EdgeInsets.all($styles.insets.md),
               // Wrap btn in a PointerInterceptor to prevent the HTML video player from intercepting the pointer (https://pub.dev/packages/pointer_interceptor)
-              child: PointerInterceptor(
-                child: const BackBtn(),
-              ),
+              child: PointerInterceptor(child: const BackBtn()),
             ),
           ),
         ],

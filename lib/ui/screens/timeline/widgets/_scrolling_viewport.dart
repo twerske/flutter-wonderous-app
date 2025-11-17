@@ -2,14 +2,12 @@ part of '../timeline_screen.dart';
 
 class _ScrollingViewport extends StatefulWidget {
   const _ScrollingViewport({
-    super.key,
-    // ignore: unused_element
-    this.onInit,
     required this.scroller,
     required this.minSize,
     required this.maxSize,
     required this.selectedWonder,
     this.onYearChanged,
+    this.onInit,
   });
   final double minSize;
   final double maxSize;
@@ -85,7 +83,7 @@ class _ScalingViewportState extends State<_ScrollingViewport> {
             ),
           ],
         ),
-      )
+      ),
     );
   }
 
@@ -97,11 +95,8 @@ class _ScalingViewportState extends State<_ScrollingViewport> {
         borderRadius: BorderRadius.circular(99),
         child: AnimatedBuilder(
           animation: controller.scroller,
-          builder: (_, __) => TimelineSection(
-            data,
-            controller.calculateYearFromScrollPos(),
-            selectedWonder: widget.selectedWonder,
-          ),
+          builder: (_, __) =>
+              TimelineSection(data, controller.calculateYearFromScrollPos(), selectedWonder: widget.selectedWonder),
         ),
       );
     }
@@ -158,16 +153,15 @@ class _ScalingViewportState extends State<_ScrollingViewport> {
 
             /// Top and bottom gradients for visual style
             ListOverscollGradient(),
-            BottomCenter(
-              child: ListOverscollGradient(bottomUp: true),
-            ),
+            BottomCenter(child: ListOverscollGradient(bottomUp: true)),
 
             /// Event Popups, rebuilds when [_currentEventMarker] changes
             ValueListenableBuilder<TimelineEvent?>(
-                valueListenable: _currentEventMarker,
-                builder: (_, data, __) {
-                  return _EventPopups(currentEvent: data);
-                })
+              valueListenable: _currentEventMarker,
+              builder: (_, data, __) {
+                return _EventPopups(currentEvent: data);
+              },
+            ),
           ],
         );
       },
